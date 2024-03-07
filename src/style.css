@@ -1,0 +1,168 @@
+@font-face {
+	font-family: 'Material Symbols Outlined';
+	font-style: normal;
+	font-weight: 100 700;
+	src: url(assets/fonts/material-icons.woff2) format('woff2');
+}
+
+@font-face {
+	font-family: "Poppins";
+	font-style: normal;
+	font-weight: normal;
+	src: url("assets/fonts/Poppins-Regular.ttf");
+}
+
+@font-face {
+	font-family: "PoiretOne";
+	font-style: normal;
+	font-weight: normal;
+	src: url("assets/fonts/PoiretOne-Regular.ttf");
+}
+
+/* TODO */
+/* @font-face {
+	font-family: 'Poppins';
+	font-style: normal;
+	font-weight: 300;
+	font-display: swap;
+	src: url(assets/fonts/Poppins-300.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+} */
+
+:root {
+	--bg: #fff;
+	--fg: #333;
+	--fg-sec: #33399;
+
+	--accent: green;
+	--p-text: 13px;
+	--text-m: 13px;
+	--text-l: 32px;
+	--text-xl: 48px;
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #222;
+		--fg: #f2f2f2;
+		--fg-sec: #f2f2f299;
+	}
+}
+
+/* RESETS */
+*, *::before, *::after { box-sizing: border-box; }
+* { font-family: Poppins; }
+html, body {
+	padding: 0;
+	margin: 0;
+}
+
+/* ICON FONT */
+.material-symbols-outlined {
+	font-family: 'Material Symbols Outlined';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 24px;
+	line-height: 1;
+	letter-spacing: normal;
+	text-transform: none;
+	display: inline-block;
+	white-space: nowrap;
+	word-wrap: normal;
+	direction: ltr;
+	-webkit-font-feature-settings: 'liga';
+	font-feature-settings: 'liga';
+	-webkit-font-smoothing: antialiased;
+}
+
+.material-symbols-outlined {
+	font-variation-settings:
+		'FILL' 0,
+		'wght' 200,
+		'GRAD' 0,
+		'opsz' 48
+}
+
+body {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	background: var(--bg);
+}
+
+h1 {
+	display: flex;
+	flex-direction: column;
+	padding: 32px 0;
+	color: var(--fg-sec);
+	font: 400 18px/var(--text-xl) PoiretOne;
+	text-align: center;
+
+	& b {
+		color: var(--fg);
+		font: 400 var(--text-xl)/var(--text-xl) PoiretOne;
+	}
+}
+
+todo-list { flex-grow: 1; }
+
+todo-list:empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: var(--fg-sec);
+
+	&::before {
+		content: '¯\\_(ツ)_/¯';
+		margin-top: 15vh;
+		font-family: arial;
+		font-size: var(--text-xl);
+	}
+	&::after {
+		content: 'NOTHIN\' TO DO, I GUESS!!'
+	}
+}
+
+.slide-indicator {
+	position: fixed;
+	inset: auto auto 60px calc(50% - 84px);
+	display: flex;
+
+	& span {
+		margin: 0 -10px;
+		color: var(--fg);
+		font-size: var(--text-l);
+		opacity: 0;
+		animation: pulse 1s ease-in-out 0s 2 forwards;
+
+		/* sequential pulse */
+		&:nth-child(3) { animation-delay: -.5s; } /* half the duration */
+		&:nth-child(2) { animation-delay: -.25s; } /* one fourth the duration */
+		&:nth-child(1) { animation-delay: 0s; }
+	}
+}
+
+@keyframes pulse {
+	20% { opacity: 0; }
+	60% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+/* TODO move to stateful-button */
+.fab {
+	--fab-size: 56px;
+	position: fixed;
+	inset: auto calc(50% - var(--fab-size) / 2) 48px;
+	width: var(--fab-size);
+	aspect-ratio: 1;
+	border: 2px solid;
+	border-radius: 50%;
+	color: var(--fg);
+	background: var(--bg);
+	font-size: var(--text-l);
+	outline: 2px solid var(--fg-sec);
+	outline-offset: -2px;
+	transition: .1s ease-out;
+
+	&:focus { outline-offset: 4px; }
+}

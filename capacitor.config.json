@@ -1,0 +1,11 @@
+{
+  "appId": "com.minimalist.todo",
+  "appName": "Minimalist TODO",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
