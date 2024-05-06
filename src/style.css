@@ -32,19 +32,25 @@
 :root {
 	--bg: #fff;
 	--fg: #333;
-	--fg-sec: #33399;
+	--fg-sec: #33333399;
 
 	--accent: green;
 	--p-text: 13px;
-	--text-m: 13px;
+	--text-s: 13px;
+	--text-m: 20px;
 	--text-l: 32px;
 	--text-xl: 48px;
+
+	--white: #fff;
+	--black: #222;
+	--green: green;
+	--red: #D20062;
 }
 @media (prefers-color-scheme: dark) {
 	:root {
 		--bg: #222;
 		--fg: #f2f2f2;
-		--fg-sec: #f2f2f299;
+		--fg-sec: #f2f2f277;
 	}
 }
 
@@ -123,6 +129,13 @@ todo-list:empty {
 	}
 }
 
+footer {
+	height: 150px;
+	display: flex;
+	align-items: center;
+	overflow: scroll hidden;
+}
+
 .slide-indicator {
 	position: fixed;
 	inset: auto auto 60px calc(50% - 84px);
@@ -136,9 +149,9 @@ todo-list:empty {
 		animation: pulse 1s ease-in-out 0s 2 forwards;
 
 		/* sequential pulse */
-		&:nth-child(3) { animation-delay: -.5s; } /* half the duration */
-		&:nth-child(2) { animation-delay: -.25s; } /* one fourth the duration */
-		&:nth-child(1) { animation-delay: 0s; }
+		&:nth-child(3) { animation-delay: 1.5s; } /* half the duration */
+		&:nth-child(2) { animation-delay: 1.75s; } /* one fourth the duration */
+		&:nth-child(1) { animation-delay: 2s; }
 	}
 }
 
@@ -151,10 +164,12 @@ todo-list:empty {
 /* TODO move to stateful-button */
 .fab {
 	--fab-size: 56px;
-	position: fixed;
-	inset: auto calc(50% - var(--fab-size) / 2) 48px;
+	position: sticky;
+	inset-inline-start: 24px;
+	flex-shrink: 0;
 	width: var(--fab-size);
 	aspect-ratio: 1;
+	margin-inline-start: calc(50% - var(--fab-size) / 2);
 	border: 2px solid;
 	border-radius: 50%;
 	color: var(--fg);
@@ -164,5 +179,11 @@ todo-list:empty {
 	outline-offset: -2px;
 	transition: .1s ease-out;
 
+	z-index: 1;
+
 	&:focus { outline-offset: 4px; }
+}
+
+footer::-webkit-scrollbar {
+	display: none;
 }

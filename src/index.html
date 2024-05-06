@@ -1,39 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-	<head>
-		<meta charset="UTF-8" />
-		<title>Minimalist TODO</title>
-		<meta
-			name="viewport"
-			content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
-		/>
-		<meta name="format-detection" content="telephone=no" />
-		<meta name="msapplication-tap-highlight" content="no" />
+<head>
+	<meta charset="UTF-8" />
+	<title>Minimalist TODO</title>
+	<meta
+		name="viewport"
+		content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+	/>
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="msapplication-tap-highlight" content="no" />
 
-		<link rel="icon" type="image/x-icon" href="./assets/icon/favicon.ico" />
-		<link rel="manifest" href="./manifest.json" />
-		<link rel="stylesheet" href="./style.css" />
-		<meta name="theme-color" content="#31d53d" />
-	</head>
-	<body>
-		<h1>
-			Minimalist
-			<b>TODO</b>
-		</h1>
+	<link rel="icon" type="image/x-icon" href="./assets/icon/favicon.ico" />
+	<link rel="manifest" href="./manifest.json" />
+	<link rel="stylesheet" href="./style.css" />
+	<meta name="theme-color" content="#222" />
+</head>
 
-		<todo-list></todo-list>
+<body>
+	<!-- TITLE -->
+	<h1>
+		Minimalist
+		<b>TODO</b>
+	</h1>
 
-		<div class="slide-indicator">
-			<span class="material-symbols-outlined">chevron_left</span>
-			<span class="material-symbols-outlined">chevron_left</span>
-			<span class="material-symbols-outlined">chevron_left</span>
-		</div>
+	<!-- TODO LIST -->
+	<todo-list></todo-list>
 
+	<!-- SLIDE ANIMATION -->
+	<div class="slide-indicator">
+		<span class="material-symbols-outlined">chevron_left</span>
+		<span class="material-symbols-outlined">chevron_left</span>
+		<span class="material-symbols-outlined">chevron_left</span>
+	</div>
+
+	<!-- FAB -->
+	<footer>
 		<button class="material-symbols-outlined fab">add</button>
+		<label-list></label-list>
+	</footer>
 
-		<bottom-sheet></bottom-sheet>
+	<add-todo-dialog></add-todo-dialog>
 
-		<script src="./components/stateful-button.js" type="module"></script>
-		<script src="./components/todo-item.js" type="module"></script>
-	</body>
+	<dialog is="edit-labels-dialog" inert></dialog>
+
+	<script src="./core/ext.js"></script>
+	<script src="./main.js" type="module"></script>
+</body>
 </html>
+
+
+<!--
+
+	dialog {
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity 0.5s;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	dialog[open] {
+		opacity: 1;
+		pointer-events: inherit;
+	}
+	dialog::backdrop {
+		background-color: rgba(0,0,255, 0.2);
+	}
+
+
+	<button onclick="dialog.showModal()">show dialog</button>
+
+	<dialog id="edit-labels" is="edit-labels-dialog">
+		<p>hi i'm a dialog!</p>
+		<form method="dialog">
+			<button>Close</button>
+		</form>
+	</dialog>
+
+ -->
