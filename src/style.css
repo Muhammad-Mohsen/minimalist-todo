@@ -45,6 +45,9 @@
 	--black: #222;
 	--green: green;
 	--red: #D20062;
+
+	--fab-size: 56px;
+	--fab-size-mini: 32px;
 }
 @media (prefers-color-scheme: dark) {
 	:root {
@@ -163,27 +166,67 @@ footer {
 
 /* TODO move to stateful-button */
 .fab {
-	--fab-size: 56px;
 	position: sticky;
 	inset-inline-start: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	flex-shrink: 0;
 	width: var(--fab-size);
 	aspect-ratio: 1;
 	margin-inline-start: calc(50% - var(--fab-size) / 2);
+	padding: 0;
 	border: 2px solid;
 	border-radius: 50%;
 	color: var(--fg);
 	background: var(--bg);
 	font-size: var(--text-l);
-	outline: 2px solid var(--fg-sec);
+	outline: 2px solid transparent;
 	outline-offset: -2px;
 	transition: .1s ease-out;
 
 	z-index: 1;
 
-	&:focus { outline-offset: 4px; }
+	&:focus {
+		outline-color: var(--fg-sec);
+		outline-offset: 4px;
+	}
+
+	&.secondary { border: none; }
+	&.mini {
+		--fab-size: var(--fab-size-mini);
+		font-size: 24px;
+	}
 }
 
 footer::-webkit-scrollbar {
 	display: none;
+}
+
+.white.white {
+	background: var(--bg);
+	color: var(--fg);
+}
+.white.fill {
+	border-color: var(--fg);
+	background: var(--fg);
+	color: var(--bg);
+}
+.green.green {
+	background: var(--bg);
+	color: var(--green);
+}
+.green.fill {
+	border-color: var(--green);
+	background: var(--green);
+	color: var(--white);
+}
+.red.red {
+	background: var(--bg);
+	color: var(--red);
+}
+.red.fill {
+	border-color: var(--red);
+	background: var(--red);
+	color: var(--white);
 }

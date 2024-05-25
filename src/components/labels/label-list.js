@@ -4,28 +4,26 @@ export class LabelList extends HTMLElement {
 
 	constructor() { super(); }
 
-	async connectedCallback() {
-		this.labels = await Repository.Labels.getAll();
-		this.innerHTML = this.css() + this.render();
+	connectedCallback() {
+		document.head.appendHTML(this.css(), { ifNotExistsSelector: '#LabelList' });
+
+		this.labels = Repository.Labels.selectAll();
+		this.innerHTML = this.render();
 	}
 
-	static clearFilters() {
+	toggle(label) {
 
 	}
-
-	static add() {
-
-	}
-	static edit() {
+	clear() {
 
 	}
-	static remove() {
-
+	edit() {
+		editLabelsDialog.open();
 	}
 
 	css() {
 		return `
-		<style>
+		<style id="LabelList">
 			label-list {
 
 				display: flex;
@@ -47,6 +45,7 @@ export class LabelList extends HTMLElement {
 					padding: 6px 12px;
 					border-radius: 6px;
 					border: 2px solid;
+					background: var(--bg);
 					font: 600 var(--text-s)/var(--text-s) Poppins;
 					text-transform: uppercase;
 					letter-spacing: .1em;
@@ -59,47 +58,20 @@ export class LabelList extends HTMLElement {
 				0% { opacity: 0; }
 				50% { opacity: 1; }
 			}
-
-			.white {
-				background: var(--bg);
-				color: var(--fg);
-			}
-			.white.fill {
-				border-color: var(--fg);
-				background: var(--fg);
-				color: var(--bg);
-			}
-			.green {
-				background: var(--bg);
-				color: var(--green);
-			}
-			.green.fill {
-				border-color: var(--green);
-				background: var(--green);
-				color: var(--white);
-			}
-			.red {
-				background: var(--bg);
-				color: var(--red);
-			}
-			.red.fill {
-				border-color: var(--red);
-				background: var(--red);
-				color: var(--white);
-			}
 		</style>
 		`;
 	}
 
 	render() {
+		const id = this.id;
 		return `
-			<h3>FILTERS</h3>
+			<h3>LABELS</h3>
 			${this.labels.map(l => {
-				return `<button class="label ${l.color}" onclick="LabelList.toggleLabel(this)">${l.name}</button>`;
+				return `<button class="label" style="color: ${l.color}" onclick="${id}.toggle(this)">${l.text}</button>`;
 			}).join('')}
-			<button class="filter green" onclick="LabelList.toggleDone()">DONE & DONE!</button>
-			<button class="filter red fill" onclick="LabelList.clearFilters()">CLEAR</button>
-			<button class="filter white fill" onclick="LabelList.editLabels()">EDIT</button>
+			<button class="filter green" onclick="${id}.toggle(this)">DONE & DONE!</button>
+			<button class="filter red fill" onclick="${id}.clear()">CLEAR</button>
+			<button class="filter white fill" onclick="${id}.edit()">EDIT</button>
 		`;
 	}
 }

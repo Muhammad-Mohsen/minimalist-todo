@@ -32,6 +32,20 @@ HTMLElement.prototype.appendHTML = function (html, options) {
 	}
 }
 
+HTMLElement.prototype.dispatchCustomEvent = function (name, data) {
+	new Function(`
+		const event = new CustomEvent('${name}', {
+			bubbles: false,
+			cancelable: true,
+			detail: ${JSON.stringify(data)}
+		});
+
+		this.dispatchEvent(event);
+
+		${this.getAttribute(`on${name}`)};
+	`)();
+}
+
 // make sure the element is relatively-positioned, and has a transition prop
 HTMLElement.prototype.makeSlidable = function (limit) {
 	let start, delta; // no touchend touches, so "delta" needs to be globally maintained

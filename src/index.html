@@ -41,7 +41,8 @@
 
 	<add-todo-dialog></add-todo-dialog>
 
-	<edit-labels-dialog id="editLabelsDialog"></edit-labels-dialog>
+	<!-- rerender labels on close -->
+	<edit-labels-dialog id="editLabelsDialog" onclose="labelList.connectedCallback()"></edit-labels-dialog>
 
 	<script src="./core/ext.js"></script>
 	<script src="./main.js" type="module"></script>
