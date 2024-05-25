@@ -3,29 +3,46 @@ import { FluentDB } from "./fluent-db/fluent-db.js";
 export const Repository = await (async () => {
 
 	const db = await FluentDB('todoDB', 1)
-		.objectStore('labels', { keyPath: 'id' })
+		.objectStore('labels', { keyPath: 'text' })
 		.objectStore('todos', { keyPath: 'id' })
 		.open();
 
 	function Store(name, key) {
 		const k = key || 'id';
 
-		const get = async (id) => await db.select(name, id);
-		const getAll = async () => await db.selectAll(name);
-		const set = async (item) => await db.upsert(name, item);
+		const select = (id) => db.select(name, id);
+		const selectAll = () => db.selectAll(name);
+		const upsert = (items) => db.upsert(name, items);
+		const del = (ids) => db.delete(name, ids);
 
 		return {
-			get,
-			getAll,
-			set
+			select,
+			selectAll,
+			upsert,
+			delete: del
 		}
 	}
 
-	const TDs = Store('todos');
-	const Labels = Store('labels');
+	const Todos = Store('todos');
+	const Labels = (() => {
+		const key = 'labels';
+
+		function upsert(labels) {
+			localStorage.setItem(key, JSON.stringify(labels));
+		}
+		function selectAll() {
+			return JSON.tryParse(localStorage.getItem(key)) || [];
+		}
+
+		return {
+			upsert,
+			selectAll
+		}
+
+	})();
 
 	return {
-		TDs,
+		Todos,
 		Labels
 	}
 
