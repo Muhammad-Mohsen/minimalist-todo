@@ -36,46 +36,14 @@
 	<!-- FAB -->
 	<footer>
 		<button class="material-symbols-outlined fab">add</button>
-		<label-list></label-list>
+		<label-list id="labelList"></label-list>
 	</footer>
 
 	<add-todo-dialog></add-todo-dialog>
 
-	<dialog is="edit-labels-dialog" inert></dialog>
+	<edit-labels-dialog id="editLabelsDialog"></edit-labels-dialog>
 
 	<script src="./core/ext.js"></script>
 	<script src="./main.js" type="module"></script>
 </body>
 </html>
-
-
-<!--
-
-	dialog {
-		pointer-events: none;
-		opacity: 0;
-		transition: opacity 0.5s;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-	dialog[open] {
-		opacity: 1;
-		pointer-events: inherit;
-	}
-	dialog::backdrop {
-		background-color: rgba(0,0,255, 0.2);
-	}
-
-
-	<button onclick="dialog.showModal()">show dialog</button>
-
-	<dialog id="edit-labels" is="edit-labels-dialog">
-		<p>hi i'm a dialog!</p>
-		<form method="dialog">
-			<button>Close</button>
-		</form>
-	</dialog>
-
- -->

@@ -1,13 +1,22 @@
-// import { SplashScreen } from '@capacitor/splash-screen';
+// NOT CURRENTLY USED
+HTMLButtonElement.prototype.state = function (state) {
+	if (state != undefined) {
 
-window.customElements.define(
-	'capacitor-welcome',
-	class extends HTMLElement {
-		constructor() {
-			super();
+		return this.setAttribute('state', state);
+	}
+	else return this.getAttribute('state');
+}
 
-			const root = this.attachShadow({ mode: 'open' });
-			root.innerHTML = `
+
+class StatefulButton extends HTMLButtonElement {
+
+	static observedAttributes = ['checked'];
+
+	constructor() {
+		super();
+
+		const root = this.attachShadow({ mode: 'open' });
+		root.innerHTML = `
 				<style>
 					:host {
 						font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -83,53 +92,19 @@ window.customElements.define(
 					</main>
 				</div>
 				`;
-		}
-
-		connectedCallback() {
-			const self = this;
-
-			self.shadowRoot.querySelector('#take-photo').addEventListener('click', async function (e) {
-				try {
-					//
-					const image = self.shadowRoot.querySelector('#image');
-					if (!image) {
-						return;
-					}
-
-					image.src = photo.webPath;
-				} catch (e) {
-					console.warn('User cancelled', e);
-				}
-			});
-		}
 	}
-);
 
-window.customElements.define(
-	'capacitor-welcome-titlebar',
-	class extends HTMLElement {
-		constructor() {
-			super();
-			const root = this.attachShadow({ mode: 'open' });
-			root.innerHTML = `
-		<style>
-			:host {
-				position: relative;
-				display: block;
-				padding: 15px 15px 15px 15px;
-				text-align: center;
-				background-color: #73B5F6;
-			}
-			::slotted(h1) {
-				margin: 0;
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-				font-size: 0.9em;
-				font-weight: 600;
-				color: #fff;
-			}
-		</style>
-		<slot></slot>
-		`;
-		}
+	connectedCallback() {
+		console.log("Custom element added to page.");
 	}
-);
+
+	disconnectedCallback() {
+		console.log("Custom element removed from page.");
+	}
+
+	attributeChangedCallback(name, oldValue, newValue) {
+		console.log(`Attribute ${name} has changed.`);
+	}
+}
+
+customElements.define("stateful-button", StatefulButton, { extends: 'button' });
