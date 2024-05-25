@@ -21,6 +21,17 @@ HTMLButtonElement.prototype.state = function (state) {
 	else return this.getAttribute('state');
 }
 
+HTMLElement.prototype.appendHTML = function (html, options) {
+	if (options.replaceSelector) {
+		this.querySelector(options.replaceSelector).remove();
+		return this.insertAdjacentHTML('beforeend', html);
+	}
+
+	if (options.ifNotExistsSelector && !this.querySelector(options.ifNotExistsSelector)) {
+		return this.insertAdjacentHTML('beforeend', html);
+	}
+}
+
 // make sure the element is relatively-positioned, and has a transition prop
 HTMLElement.prototype.makeSlidable = function (limit) {
 	let start, delta; // no touchend touches, so "delta" needs to be globally maintained
@@ -40,4 +51,8 @@ HTMLElement.prototype.makeSlidable = function (limit) {
 }
 HTMLElement.prototype.resetSlide = function () {
 	this.style.right = '0';
+}
+
+String.prototype.minify = function () {
+	return this.replace(/\s{2,}[\t\n]+/, '');
 }
