@@ -11,11 +11,28 @@ export class LabelList extends HTMLElement {
 		this.innerHTML = this.render();
 	}
 
-	toggle(label) {
+	toggle(label, notify) {
+		const newState = label.state() ? '' : 'active';
+		label.state(newState);
 
+		const color = label.dataset.color;
+		label.style = `background: ${newState ? color : 'var(--bg)'}; color: ${newState ? 'var(--bg)' : color}; border-color: ${color}`;
+
+		if (notify) this.dispatchCustomEvent('filter');
+	}
+	toggleDoneDone(doneDone) {
+		const states = { // cycles the state
+			all: 'done',
+			done: 'notdone',
+			notdone: 'all'
+		};
+
+		doneDone.state(states[doneDone.state()]);
+		this.dispatchCustomEvent('filter');
 	}
 	clear() {
-
+		this.querySelectorAll('.label[state="active"]').toArray().forEach(l => this.toggle(l, false));
+		this.dispatchCustomEvent('filter');
 	}
 	edit() {
 		editLabelsDialog.open();
@@ -49,9 +66,14 @@ export class LabelList extends HTMLElement {
 					font: 600 var(--text-s)/var(--text-s) Poppins;
 					text-transform: uppercase;
 					letter-spacing: .1em;
+					transition: .2s ease-out;
 				}
 
 				& button.filter { border-radius: 50px; }
+
+				& button.done-done { background: var(--bg); color: var(--green); border-color: var(--green); }
+				& .done-done[state="done"] { background: var(--green); color: var(--bg); border-color: var(--green); }
+				& .done-done[state="notdone"] { text-decoration: line-through 3px; }
 			}
 
 			@keyframes scroll-reveal {
@@ -67,9 +89,9 @@ export class LabelList extends HTMLElement {
 		return `
 			<h3>LABELS</h3>
 			${this.labels.map(l => {
-				return `<button class="label" style="color: ${l.color}" onclick="${id}.toggle(this)">${l.text}</button>`;
+				return `<button class="label" style="color: ${l.color}" data-color="${l.color}" onclick="${id}.toggle(this, true)">${l.text}</button>`;
 			}).join('')}
-			<button class="filter green" onclick="${id}.toggle(this)">DONE & DONE!</button>
+			<button class="filter done-done" state="all" onclick="${id}.toggleDoneDone(this)">&nbsp;DONE & DONE!&nbsp;</button>
 			<button class="filter red fill" onclick="${id}.clear()">CLEAR</button>
 			<button class="filter white fill" onclick="${id}.edit()">EDIT</button>
 		`;

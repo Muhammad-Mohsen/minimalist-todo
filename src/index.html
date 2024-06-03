@@ -24,7 +24,7 @@
 	</h1>
 
 	<!-- TODO LIST -->
-	<todo-list></todo-list>
+	<todo-list id="todoList"></todo-list>
 
 	<!-- SLIDE ANIMATION -->
 	<div class="slide-indicator">
@@ -35,13 +35,12 @@
 
 	<!-- FAB -->
 	<footer>
-		<button class="material-symbols-outlined fab">add</button>
+		<button class="material-symbols-outlined fab" onclick="todoList.add()">add</button>
 		<label-list id="labelList"></label-list>
 	</footer>
 
-	<add-todo-dialog></add-todo-dialog>
+	<todo-dialog onclose="todoList.connectedCallback()"></todo-dialog>
 
-	<!-- rerender labels on close -->
 	<edit-labels-dialog id="editLabelsDialog" onclose="labelList.connectedCallback()"></edit-labels-dialog>
 
 	<script src="./core/ext.js"></script>

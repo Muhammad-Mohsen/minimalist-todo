@@ -113,25 +113,6 @@ h1 {
 	}
 }
 
-todo-list { flex-grow: 1; }
-
-todo-list:empty {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	color: var(--fg-sec);
-
-	&::before {
-		content: '¯\\_(ツ)_/¯';
-		margin-top: 15vh;
-		font-family: arial;
-		font-size: var(--text-xl);
-	}
-	&::after {
-		content: 'NOTHIN\' TO DO, I GUESS!!'
-	}
-}
-
 footer {
 	height: 150px;
 	display: flex;

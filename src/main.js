@@ -1,7 +1,7 @@
-// import the modules so that they are included in the page
+// import the modules so they are included in the app
 
+import { Repository } from "./core/repository.js";
 import { LabelList } from "./components/labels/label-list.js";
 import { EditLabelsDialog } from "./components/labels/edit-labels-dialog.js";
-import { Repository } from "./core/repository.js";
-
-window.Repository = Repository;
+import { TODOList } from "./components/todos/todo-list.js";
+// import { TODODialog } from "./components/todos/todo-dialog.js";

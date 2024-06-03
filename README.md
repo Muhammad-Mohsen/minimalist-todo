@@ -10,5 +10,6 @@ I wanted to do this to develop/test some 'native' web components techniques and 
 - using 'Named access on the Window object'
 - using light DOM in Web Components
 - extending the DOM API
+- using CSS for declarative state management
 
 I understand that most of these techniques are frowned upon, but in today's world of front-end frameworks, they aren't really that bad if you think about it.

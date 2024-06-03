@@ -190,6 +190,9 @@ export class EditLabelsDialog extends HTMLElement {
 			<button class="material-symbols-outlined fab mini red" onclick="${this.id}.delete(this);">delete</button>
 		</div>`;
 	}
+	#id() {
+		return new Date().getTime();
+	}
 }
 
 customElements.define('edit-labels-dialog', EditLabelsDialog);
