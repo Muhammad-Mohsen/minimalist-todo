@@ -1,6 +1,6 @@
 import { Repository } from "../../core/repository.js";
 
-export class EditLabelsDialog extends HTMLElement {
+export class LabelsDialog extends HTMLElement {
 
 	static DEFAULT_COLOR = '#000000';
 
@@ -25,9 +25,9 @@ export class EditLabelsDialog extends HTMLElement {
 
 		if (!text.value.trim()) return;
 
-		target.parentElement.insertAdjacentHTML('beforebegin', this.#labelHTML({ color: color.value || EditLabelsDialog.DEFAULT_COLOR, text: text.value }));
+		target.parentElement.insertAdjacentHTML('beforebegin', this.#labelHTML({ color: color.value || LabelsDialog.DEFAULT_COLOR, text: text.value }));
 
-		color.value = EditLabelsDialog.DEFAULT_COLOR;
+		color.value = LabelsDialog.DEFAULT_COLOR;
 		text.value = '';
 	}
 	delete(target) {
@@ -59,7 +59,7 @@ export class EditLabelsDialog extends HTMLElement {
 	css() {
 		return `
 			<style id="EditLabelsDialog">
-				edit-labels-dialog {
+				labels-dialog {
 					--hr-split: calc(50% + 44px);
 
 					position: fixed;
@@ -195,4 +195,4 @@ export class EditLabelsDialog extends HTMLElement {
 	}
 }
 
-customElements.define('edit-labels-dialog', EditLabelsDialog);
+customElements.define('labels-dialog', LabelsDialog);
