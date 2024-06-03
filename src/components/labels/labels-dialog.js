@@ -25,7 +25,7 @@ export class LabelsDialog extends HTMLElement {
 
 		if (!text.value.trim()) return;
 
-		target.parentElement.insertAdjacentHTML('beforebegin', this.#labelHTML({ color: color.value || LabelsDialog.DEFAULT_COLOR, text: text.value }));
+		target.parentElement.insertAdjacentHTML('beforebegin', this.#labelHTML({ id: this.#id(), color: color.value || LabelsDialog.DEFAULT_COLOR, text: text.value }));
 
 		color.value = LabelsDialog.DEFAULT_COLOR;
 		text.value = '';
@@ -41,6 +41,7 @@ export class LabelsDialog extends HTMLElement {
 		const labels = this.querySelectorAll('.label-entry:not(.new)')
 			.toArray()
 			.map(l => ({
+				id: l.getAttribute('label-id'),
 				color: l.querySelector('[type="color"]').value,
 				text: l.querySelector('[type="text"]').value
 			}));
@@ -184,7 +185,7 @@ export class LabelsDialog extends HTMLElement {
 	}
 
 	#labelHTML(label) {
-		return `<div class="label-entry">
+		return `<div class="label-entry" label-id="${label.id}">
 			<input type="color" value="${label.color}">
 			<input type="text" value="${label.text}">
 			<button class="material-symbols-outlined fab mini red" onclick="${this.id}.delete(this);">delete</button>
