@@ -176,10 +176,10 @@ export class TodoDialog extends HTMLElement {
 	}
 	#labelHTML(label) {
 		const style = this.todo.labels.includes(label.id) // isActive
-			? `style="color: var(--bg); background: ${label.color}; border-color: ${label.color}"`
-			: `style="color: ${label.color}; background: var(--bg); border-color: ${label.color}"`;
+			? `style="color: var(--bg); background: ${label.color}; border-color: ${label.color}" state="active"`
+			: `style="color: ${label.color}; background: var(--bg); border-color: ${label.color}" state=""`;
 
-		return `<button class="label" ${style} data-color="${label.color}" onclick="${this.id}.toggleLabel(this)">${label.text}</button>`
+		return `<button class="label" ${style} data-color="${label.color}" data-id="${label.id}" onclick="${this.id}.toggleLabel(this)">${label.text}</button>`
 	}
 }
 
