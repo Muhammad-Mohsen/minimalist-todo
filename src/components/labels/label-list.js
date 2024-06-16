@@ -11,6 +11,7 @@ export class LabelList extends HTMLElement {
 		this.innerHTML = this.render();
 	}
 
+	// filtering functions
 	toggle(label, notify) {
 		const newState = label.state() ? '' : 'active';
 		label.state(newState);
@@ -18,7 +19,10 @@ export class LabelList extends HTMLElement {
 		const color = label.dataset.color;
 		label.style = `background: ${newState ? color : 'var(--bg)'}; color: ${newState ? 'var(--bg)' : color}; border-color: ${color}`;
 
-		if (notify) this.dispatchCustomEvent('filter');
+		if (notify) this.dispatchCustomEvent('filter', {
+			done: this.querySelector('.done-done').state(),
+			filters: this.querySelectorAll('.label[state="active"]').toArray().map(l => l.dataset.id)
+		});
 	}
 	toggleDoneDone(doneDone) {
 		const states = { // cycles the state
@@ -28,14 +32,21 @@ export class LabelList extends HTMLElement {
 		};
 
 		doneDone.state(states[doneDone.state()]);
-		this.dispatchCustomEvent('filter');
+		this.dispatchCustomEvent('filter', {
+			done: doneDone.state(),
+			filters: this.querySelectorAll('.label[state="active"]').toArray().map(l => l.dataset.id)
+		});
 	}
 	clear() {
 		this.querySelectorAll('.label[state="active"]').toArray().forEach(l => this.toggle(l, false));
-		this.dispatchCustomEvent('filter');
+		this.dispatchCustomEvent('filter', {
+			done: this.querySelector('.done-done').state(),
+			filters: []
+		});
 	}
+
 	edit() {
-		editLabelsDialog.open();
+		labelsDialog.open();
 	}
 
 	css() {
@@ -46,7 +57,7 @@ export class LabelList extends HTMLElement {
 				display: flex;
 				align-items: center;
 				gap: 12px;
-				margin-inline: 64px 80px;
+				padding-inline: 64px 100px;
 
 				animation: scroll-reveal both;
 				animation-timeline: scroll(x);
@@ -67,6 +78,8 @@ export class LabelList extends HTMLElement {
 					text-transform: uppercase;
 					letter-spacing: .1em;
 					transition: .2s ease-out;
+					scroll-snap-align: end;
+					scroll-padding-inline-end: var(--scroll-overshoot);
 				}
 
 				& button.filter { border-radius: 50px; }
@@ -77,7 +90,7 @@ export class LabelList extends HTMLElement {
 			}
 
 			@keyframes scroll-reveal {
-				0% { opacity: 0; }
+				0%, 5% { opacity: 0; }
 				50% { opacity: 1; }
 			}
 		</style>
@@ -89,7 +102,7 @@ export class LabelList extends HTMLElement {
 		return `
 			<h3>LABELS</h3>
 			${this.labels.map(l => {
-				return `<button class="label" style="color: ${l.color}" data-color="${l.color}" onclick="${id}.toggle(this, true)">${l.text}</button>`;
+				return `<button class="label" style="color: ${l.color}" data-id="${l.id}" data-color="${l.color}" onclick="${id}.toggle(this, true)">${l.text}</button>`;
 			}).join('')}
 			<button class="filter done-done" state="all" onclick="${id}.toggleDoneDone(this)">&nbsp;DONE & DONE!&nbsp;</button>
 			<button class="filter red fill" onclick="${id}.clear()">CLEAR</button>

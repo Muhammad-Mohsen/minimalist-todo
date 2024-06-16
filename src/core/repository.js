@@ -1,9 +1,13 @@
 import { FluentDB } from "./fluent-db/fluent-db.js";
 
+// object structure
+// Todo: { id: number, text: string, isDone: bool, labels: number[] }
+// Label: { id: number, text: string, color: string }
+
 export const Repository = await (async () => {
 
 	const db = await FluentDB('todoDB', 1)
-		.objectStore('labels', { keyPath: 'text' })
+		.objectStore('labels', { keyPath: 'id' })
 		.objectStore('todos', { keyPath: 'id' })
 		.open();
 

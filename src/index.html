@@ -35,13 +35,12 @@
 
 	<!-- FAB -->
 	<footer>
-		<button class="material-symbols-outlined fab" onclick="todoList.add()">add</button>
-		<label-list id="labelList"></label-list>
+		<button class="material-symbols-outlined fab main" onclick="todoDialog.open()">add</button>
+		<label-list id="labelList" onfilter="todoList.onFiltersChanged(event)"></label-list>
 	</footer>
 
-	<todo-dialog onclose="todoList.connectedCallback()"></todo-dialog>
-
-	<labels-dialog id="editLabelsDialog" onclose="labelList.connectedCallback()"></labels-dialog>
+	<todo-dialog id="todoDialog" onclose="todoList.connectedCallback()"></todo-dialog>
+	<labels-dialog id="labelsDialog" onclose="labelList.connectedCallback()"></labels-dialog>
 
 	<script src="./core/ext.js"></script>
 	<script src="./main.js" type="module"></script>

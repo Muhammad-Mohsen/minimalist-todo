@@ -7,7 +7,7 @@ export class LabelsDialog extends HTMLElement {
 	constructor() { super(); }
 
 	connectedCallback() {
-		document.head.appendHTML(this.css(), { ifNotExistsSelector: '#EditLabelsDialog' });
+		document.head.appendHTML(this.css(), { ifNotExistsSelector: '#LabelsDialog' });
 		this.setAttribute('aria-hidden', 'true');
 	}
 
@@ -16,7 +16,7 @@ export class LabelsDialog extends HTMLElement {
 		this.innerHTML = this.render();
 
 		this.setAttribute('open', '');
-		this.removeAttribute('aria-hidden', '');
+		this.removeAttribute('aria-hidden');
 	}
 
 	add(target) {
@@ -25,88 +25,122 @@ export class LabelsDialog extends HTMLElement {
 
 		if (!text.value.trim()) return;
 
-		target.parentElement.insertAdjacentHTML('beforebegin', this.#labelHTML({ id: this.#id(), color: color.value || LabelsDialog.DEFAULT_COLOR, text: text.value }));
+		const container = this.querySelector('main');
+		container.insertAdjacentHTML('beforeend', this.#labelHTML({ id: this.#id(), color: color.value || LabelsDialog.DEFAULT_COLOR, text: text.value }, 'hidden'));
+		setTimeout(() => container.querySelector('.label-entry:last-child').classList.remove('hidden'), 100);
 
 		color.value = LabelsDialog.DEFAULT_COLOR;
 		text.value = '';
 	}
 	delete(target) {
-		target.parentElement.remove();
+		target = target.parentElement;
+		target.classList.add('hidden');
+		setTimeout(() => target.remove(), 250);
 	}
-	reset() {
-		this.innerHTML = this.render();
+	back(notify) {
+		// close the thing
+		this.setAttribute('aria-hidden', 'true');
+		this.removeAttribute('open');
+
+		// dispatch close event
+		if (notify) this.dispatchCustomEvent('close', this.todo);
 	}
 	saveAndClose() {
 		// get the labels from the UI!
 		const labels = this.querySelectorAll('.label-entry:not(.new)')
 			.toArray()
 			.map(l => ({
-				id: l.getAttribute('label-id'),
+				id: l.getAttribute('data-id'),
 				color: l.querySelector('[type="color"]').value,
 				text: l.querySelector('[type="text"]').value
 			}));
 
-		// save them
+		// save em
 		Repository.Labels.upsert(labels);
 
-		// close the thing
-		this.setAttribute('aria-hidden', 'true');
-		this.removeAttribute('open');
-
-		// dispatch close event with the updated labels
-		this.dispatchCustomEvent('close', this.labels);
+		this.back('notify');
 	}
 
 	css() {
 		return `
-			<style id="EditLabelsDialog">
+			<style id="LabelsDialog">
 				labels-dialog {
-					--hr-split: calc(50% + 44px);
-
 					position: fixed;
 					inset: 0;
 					display: flex;
 					flex-direction: column;
-					background: var(--bg);
+					justify-content: flex-end;
 
-					/*
 					backdrop-filter: blur(40px);
     				background: #2225;
-					*/
+					-webkit-mask-image: linear-gradient(transparent, black 10%);
 
-					translate: 0 30vh;
-					opacity: 0;
-					pointer-events: none;
-					transition: .2s ease-out;
+					translate: 0 130vh;
+					transition: .35s cubic-bezier(0.7, 0, 0.84, 0);
 					z-index: 1;
 
 					&[open] {
 						translate: 0;
-						opacity: 1;
-						pointer-events: all;
+						transition: .35s cubic-bezier(0.16, 1, 0.3, 1);
 					}
 
-					& hr {
-						position: absolute;
-						inset: 58px var(--hr-split) auto 0;
-						border: 1px solid var(--fg-sec);
+					& h1 {
+						position: relative;
+						width: fit-content;
+						margin-inline: auto;
+						padding: 0 12px;
+						color: var(--fg);
+
+						&::before, &::after {
+							content: '';
+							position: absolute;
+							inset: calc(50% - 1px) auto auto 0;
+							width: 100vw;
+							height: 2px;
+							background: var(--fg-sec);
+						}
+						&::before { translate: -100% 0; }
+						&::after { inset: calc(50% - 1px) auto auto 100%; }
 					}
-					& h1 + hr { inset: 58px 0 auto var(--hr-split); }
 
 					& main {
-						flex-grow: 1;
 						display: flex;
 						flex-direction: column;
-						gap: 16px;
-						padding: 2px 0;
+						max-height: calc(100vh - 302px);
+						padding: 6px 0 0;
 						overflow-y: auto;
 					}
 
 					& .label-entry {
 						display: flex;
 						align-items: center;
+						margin-block: 8px;
 						padding: 8px;
-						transition: .25s ease-out;
+						transition: .25s ease;
+
+						outline: 2px solid #0000;
+						outline-offset: -2px;
+
+						max-height: 100%;
+						overflow: hidden;
+
+						* {
+							overflow: hidden;
+							transition: .25s ease;
+						}
+
+						&.hidden {
+							max-height: 0;
+							margin-block: 0;
+							padding-block: 0;
+							opacity: 0;
+							translate: -50px 0;
+
+							& * {
+								max-height: 0 !important;
+								padding-block: 0 !important;
+							}
+						}
 
 						& input, & button {
 							border: none;
@@ -142,16 +176,18 @@ export class LabelsDialog extends HTMLElement {
 						& .red { opacity: 0; }
 					}
 					& .label-entry:focus-within {
-						box-shadow: 0 0 0 2px var(--fg-sec);
+						/* box-shadow: 0 0 0 2px var(--fg-sec); */
+						outline-color: var(--fg-sec);
+						outline-offset: 4px;
 
 						& .red { opacity: 1; }
 					}
 
-					& footer { position: relative; }
-					& .fab.undo {
-						position: absolute;
-						inset: calc(50% - var(--fab-size) / 2) auto auto 25%;
-						margin: unset;
+					& footer {
+						flex-shring: 0;
+						justify-content: flex-end;
+						gap: 20px;
+						padding: 0 calc(50% - var(--fab-size) / 2) 0 0;
 					}
 				}
 			</style>
@@ -162,30 +198,26 @@ export class LabelsDialog extends HTMLElement {
 		const id = this.id;
 
 		return `
-			<div class="scrim"></div>
-			<hr>
 			<h1>LABELS</h1>
-			<hr>
 			<main>
 				${this.labels.map(l => this.#labelHTML(l)).join('')}
-
-				<div class="label-entry new">
-					<input type="color">
-					<input type="text" placeholder="Add Label">
-					<button class="material-symbols-outlined fab mini" onclick="${id}.add(this);">add</button>
-				</div>
 			</main>
 
+			<div class="label-entry new">
+				<input type="color">
+				<input type="text" placeholder="Add Label">
+				<button class="material-symbols-outlined fab mini" onclick="${id}.add(this);">add</button>
+			</div>
+
 			<footer>
-				<button class="material-symbols-outlined undo fab secondary" onclick="${id}.reset()">undo</button>
+				<button class="material-symbols-outlined undo fab secondary" onclick="${id}.back()">west</button>
 				<button class="material-symbols-outlined fab green" onclick="${id}.saveAndClose()">check</button>
 			</footer>
-
-		`.minify();
+		`;
 	}
 
-	#labelHTML(label) {
-		return `<div class="label-entry" label-id="${label.id}">
+	#labelHTML(label, hidden) {
+		return `<div class="label-entry ${hidden || ''}" data-id="${label.id}">
 			<input type="color" value="${label.color}">
 			<input type="text" value="${label.text}">
 			<button class="material-symbols-outlined fab mini red" onclick="${this.id}.delete(this);">delete</button>
