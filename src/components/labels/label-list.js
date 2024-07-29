@@ -38,9 +38,12 @@ export class LabelList extends HTMLElement {
 		});
 	}
 	clear() {
+		const doneDone = this.querySelector('.done-done');
+		doneDone.state('all');
+
 		this.querySelectorAll('.label[state="active"]').toArray().forEach(l => this.toggle(l, false));
 		this.dispatchCustomEvent('filter', {
-			done: this.querySelector('.done-done').state(),
+			done: 'all',
 			filters: []
 		});
 	}
@@ -57,7 +60,7 @@ export class LabelList extends HTMLElement {
 				display: flex;
 				align-items: center;
 				gap: 12px;
-				padding-inline: 64px 100px;
+				padding-inline: 64px 120px;
 
 				animation: scroll-reveal both;
 				animation-timeline: scroll(x);
