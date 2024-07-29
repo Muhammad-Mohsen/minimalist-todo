@@ -40,7 +40,7 @@
 	</footer>
 
 	<todo-dialog id="todoDialog" onclose="todoList.connectedCallback()"></todo-dialog>
-	<labels-dialog id="labelsDialog" onclose="labelList.connectedCallback()"></labels-dialog>
+	<labels-dialog id="labelsDialog" onclose="labelList.connectedCallback(); todoList.connectedCallback();"></labels-dialog>
 
 	<script src="./core/ext.js" type="module"></script>
 	<script src="./main.js" type="module"></script>
