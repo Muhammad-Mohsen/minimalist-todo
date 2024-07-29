@@ -31,7 +31,7 @@ npx cap init
 ```
 
 ```
-npm install @capacitor/ios @capacitor/android
+npm install @capacitor/android
 npx cap add android
 ```
 
@@ -45,7 +45,7 @@ npx cap add android
 - The `www/manifest.json` file is needed for the assets package to work!
 - run the below command
 ```
-npx @capacitor/assets generate --iconBackgroundColor #fff0d9 --iconBackgroundColorDark #fff0d9 --splashBackgroundColor #fff0d9 --splashBackgroundColorDark #fff0d9
+npx @capacitor/assets generate --iconBackgroundColor #000000 --iconBackgroundColorDark #000000 --splashBackgroundColor #000000 --splashBackgroundColorDark #000000 --assetPath src/assets/icons
 ```
 
 More info [here](https://github.com/ionic-team/capacitor-assets)

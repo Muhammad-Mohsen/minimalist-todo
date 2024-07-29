@@ -1,7 +1,7 @@
 {
-  "name": "capacitor-app",
+  "name": "minimalist-todo",
   "version": "1.0.0",
-  "description": "An Amazing Capacitor App",
+  "description": "As minimalist a TODO app as they come",
   "main": "index.js",
   "keywords": [
     "capacitor",
@@ -13,12 +13,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "latest",
-    "@capacitor/camera": "latest",
+    "@capacitor/android": "^6.1.0",
+    "@capacitor/core": "^6.1.0",
     "@capacitor/splash-screen": "latest"
   },
   "devDependencies": {
-    "@capacitor/cli": "latest",
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.0",
     "vite": "^2.9.13"
   },
   "author": "",
