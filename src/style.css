@@ -43,7 +43,7 @@
 }
 @media (prefers-color-scheme: dark) {
 	:root {
-		--bg: #222;
+		--bg: #000;
 		--fg: #f2f2f2;
 		--fg-sec: #f2f2f277;
 	}
@@ -182,28 +182,19 @@ footer::-webkit-scrollbar { display: none; }
 	100% { opacity: 0; }
 }
 
-.white.white {
-	background: var(--bg);
-	color: var(--fg);
-}
+.white.white { color: var(--fg); }
 .white.fill {
 	border-color: var(--fg);
 	background: var(--fg);
 	color: var(--bg);
 }
-.green.green {
-	background: var(--bg);
-	color: var(--green);
-}
+.green.green { color: var(--green); }
 .green.fill {
 	border-color: var(--green);
 	background: var(--green);
 	color: var(--white);
 }
-.red.red {
-	background: var(--bg);
-	color: var(--red);
-}
+.red.red { color: var(--red); }
 .red.fill {
 	border-color: var(--red);
 	background: var(--red);
