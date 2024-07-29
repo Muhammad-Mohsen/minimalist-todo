@@ -89,7 +89,7 @@ export class TodoList extends HTMLElement {
 					& .content {
 						position: relative;
 						display: flex;
-    					gap: 12px;
+    					gap: 0 12px;
 						flex-wrap: wrap;
 						min-width: 100vw;
     					padding: 12px 32px;
@@ -117,7 +117,7 @@ export class TodoList extends HTMLElement {
 
 						& .pill {
 							width: 28px;
-							height: 8px;
+							height: 4px;
 							border-radius: 50px;
 						}
 					}
