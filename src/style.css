@@ -21,8 +21,9 @@
 
 :root {
 	--bg: #fff;
-	--fg: #333;
+	--fg: #111;
 	--fg-sec: #33333399;
+	--bg-alpha: #eee3;
 
 	--accent: green;
 	--p-text: 13px;
@@ -46,6 +47,7 @@
 		--bg: #000;
 		--fg: #f2f2f2;
 		--fg-sec: #f2f2f277;
+		--bg-alpha: #1113;
 	}
 }
 

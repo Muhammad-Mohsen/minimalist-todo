@@ -66,7 +66,7 @@ export class TodoDialog extends HTMLElement {
 					justify-content: flex-end;
 
 					backdrop-filter: blur(25px);
-    				background: #1113;
+    				background: var(--bg-alpha);
 					-webkit-mask-image: linear-gradient(transparent, black 10%);
 
 					translate: 0 130vh;
