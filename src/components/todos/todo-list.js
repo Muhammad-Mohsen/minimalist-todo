@@ -10,6 +10,7 @@ export class TodoList extends HTMLElement {
 		this.labels = Repository.Labels.selectAll();
 		this.todos = await Repository.Todos.selectAll();
 
+		this.classList.toggle('empty', !this.todos.length);
 		this.innerHTML = this.render();
 	}
 
@@ -26,7 +27,10 @@ export class TodoList extends HTMLElement {
 
 		element = element.closest('.item');
 		element.classList.add('hidden');
-		setTimeout(() => element.remove(), 250);
+		setTimeout(() => {
+			element.remove();
+			this.classList.toggle('empty', !this.todos.length);
+		}, 250);
 	}
 	editItem(id, element) {
 		todoDialog.open(id);
@@ -55,7 +59,7 @@ export class TodoList extends HTMLElement {
 			todo-list {
 				flex-grow: 1;
 
-				&:empty {
+				&.empty {
 					display: flex;
 					flex-direction: column;
 					align-items: center;
@@ -84,15 +88,13 @@ export class TodoList extends HTMLElement {
 						max-height: 0;
 						opacity: 0;
 						translate: -50px 0;
+						transition: .25s ease, max-height .25s ease .15s;
 					}
 
 					& .content {
 						position: relative;
-						display: flex;
-    					gap: 0 12px;
-						flex-wrap: wrap;
 						min-width: 100vw;
-    					padding: 12px 32px;
+    					padding: 16px 32px 0 48px;
 						color: var(--fg);
 						font-size: 14px;
 						scroll-snap-align: start;
@@ -105,14 +107,11 @@ export class TodoList extends HTMLElement {
 							transition: .5s;
 						}
 
-						& i { color: var(--fg-sec); }
-						& i.done { color: var(--green); }
-
 						& .labels {
 							flex: 1 0 100%;
 							display: flex;
     						gap: 8px;
-							margin-inline-start: 34px;
+							margin-block: 8px;
 						}
 
 						& .pill {
@@ -122,16 +121,17 @@ export class TodoList extends HTMLElement {
 						}
 					}
 
-					& .content .done-marker {
-						margin-inline-start: -36px;
-						scale: .1;
-						opacity: 0;
-					}
-
 					& .content.done span {
     					color: var(--green);
 						text-decoration: line-through;
 					}
+
+					& .content i {
+						position: absolute;
+						inset: 14px auto auto 12px;
+						color: var(--fg-sec);
+					}
+					& .content .done-marker { color: var(--green); }
 
 					& .content .undone-marker,
 					& .content.done .done-marker { scale: 1; opacity: 1; transition: .2s ease-in .2s; transform-origin: 12px 12px; }
@@ -139,10 +139,8 @@ export class TodoList extends HTMLElement {
 					& .content .done-marker,
 					& .content.done .undone-marker { scale: .1; opacity: 0; transition: .2s ease-out; transform-origin: 12px 12px; }
 
+					/* animation inspired by magnificode's codepen */
 					& .content .done-marker {
-						position: relative;
-
-						/* animation inspired by magnificode's codepen */
 						&::before {
 							content: '';
 							position: absolute;
@@ -167,7 +165,7 @@ export class TodoList extends HTMLElement {
 						display: flex;
 						align-items: center;
 						gap: 12px;
-						padding: 12px;
+						padding: 0 12px;
 						scroll-snap-align: end;
 
 						& button.action {
