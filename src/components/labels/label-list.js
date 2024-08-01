@@ -73,7 +73,7 @@ export class LabelList extends HTMLElement {
 
 				& button {
 					flex-shrink: 0;
-					padding: 6px 12px;
+					padding: 7px 12px 6px; /* poppins is one pixel out of alignment! */
 					border-radius: 6px;
 					border: 2px solid;
 					background: var(--bg);
