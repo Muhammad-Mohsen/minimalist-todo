@@ -112,6 +112,7 @@ export class LabelsDialog extends HTMLElement {
 					}
 
 					& .label-entry {
+						flex-shrink: 0;
 						display: flex;
 						align-items: center;
 						margin-block: 8px;
