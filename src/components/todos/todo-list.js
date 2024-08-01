@@ -24,6 +24,7 @@ export class TodoList extends HTMLElement {
 	}
 	async deleteItem(id, element) {
 		await Repository.Todos.delete([id]);
+		this.todos = this.todos.filter(td => td.id != id);
 
 		element = element.closest('.item');
 		element.classList.add('hidden');
