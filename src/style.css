@@ -107,6 +107,9 @@ h1 {
 	}
 }
 
+/* here for performance reasons...otherwise, we have to wait until the component js loads and runs before applying the css */
+todo-list { flex-grow: 1; }
+
 footer {
 	height: 150px;
 	display: flex;

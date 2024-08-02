@@ -58,7 +58,6 @@ export class TodoList extends HTMLElement {
 		return `
 		<style id="TodoList">
 			todo-list {
-				flex-grow: 1;
 
 				&.empty {
 					display: flex;

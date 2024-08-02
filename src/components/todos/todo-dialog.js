@@ -121,7 +121,8 @@ export class TodoDialog extends HTMLElement {
 					& .label-list {
 						display: flex;
 						gap: 12px;
-						padding: 0 16px;
+						margin: -20px 0;
+						padding: 20px 16px;
 						overflow-x: auto;
 
 						&::-webkit-scrollbar { display: none; }
