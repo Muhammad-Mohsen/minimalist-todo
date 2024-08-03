@@ -4,9 +4,24 @@ export class TodoDialog extends HTMLElement {
 
 	constructor() { super(); }
 
+	static THRESHOLD = 100;
+	intermediateY = 0;
+
 	connectedCallback() {
 		document.head.appendHTML(this.css(), { ifNotExistsSelector: '#TodoDialog' });
 		this.setAttribute('aria-hidden', 'true');
+
+		this.ontouchstart = (event) => {
+			this.intermediateY = event.touches[0].clientY;
+		}
+		this.ontouchmove = (event) => {
+			const delta = Math.max(0, event.touches[0].clientY - this.intermediateY); // prevent -ve
+			this.style.transform = `translateY(${delta}px)`;
+		}
+		this.ontouchend = () => {
+			if (parseInt(this.style.transform.slice(11, -3)) > TodoDialog.THRESHOLD) this.back();
+			this.style.transform = '';
+		}
 	}
 
 	async open(id) {
