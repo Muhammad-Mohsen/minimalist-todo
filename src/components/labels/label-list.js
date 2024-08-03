@@ -56,17 +56,17 @@ export class LabelList extends HTMLElement {
 		return `
 		<style id="LabelList">
 			label-list {
-
+				flex-shrink: 0;
 				display: flex;
 				align-items: center;
 				gap: 12px;
-				padding-inline: 64px 120px;
+				padding-inline: 0 20px;
 
 				animation: scroll-reveal both;
 				animation-timeline: scroll(x);
 
 				& h3 {
-					margin-inline-end: 56px;
+					margin-inline: 56px;
 					color: var(--fg);
 					font: 400 var(--text-m)/var(--text-l) PoiretOne;
 				}
