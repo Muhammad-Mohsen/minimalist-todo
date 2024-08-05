@@ -42,11 +42,10 @@ export class TodoList extends HTMLElement {
 
 	onFiltersChanged(event) {
 		const data = event.detail;
-		console.log(data);
 		this.querySelectorAll('.item').toArray().forEach(td => {
 			const doneGood = data.done == 'all'
 				|| data.done == 'done' && td.dataset.isdone == 'true'
-				|| data.done == 'notdone' && td.dataset.isdone == 'false';
+				|| data.done == 'notdone' && td.dataset.isdone != 'true';
 
 			const labelGood = !data.filters.length || data.filters.reduce((a, b) => a ||= td.dataset.labels.includes(b), false);
 
