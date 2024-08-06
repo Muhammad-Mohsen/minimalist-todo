@@ -3,27 +3,12 @@ import { Repository } from "../../core/repository.js";
 export class LabelsDialog extends HTMLElement {
 
 	static DEFAULT_COLOR = '#000000';
-	static THRESHOLD = 100;
-
-	intermediateY = 0;
 
 	constructor() { super(); }
 
 	connectedCallback() {
 		document.head.appendHTML(this.css(), { ifNotExistsSelector: '#LabelsDialog' });
 		this.setAttribute('aria-hidden', 'true');
-
-		this.ontouchstart = (event) => {
-			this.intermediateY = event.touches[0].clientY;
-		}
-		this.ontouchmove = (event) => {
-			const delta = Math.max(0, event.touches[0].clientY - this.intermediateY); // prevent -ve
-			this.style.transform = `translateY(${delta}px)`;
-		}
-		this.ontouchend = () => {
-			if (parseInt(this.style.transform.slice(11, -3)) > LabelsDialog.THRESHOLD) this.back();
-			this.style.transform = '';
-		}
 	}
 
 	open() {
