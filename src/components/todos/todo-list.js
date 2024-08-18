@@ -122,7 +122,7 @@ export class TodoList extends HTMLElement {
 
 					& .content.done span {
     					color: var(--green);
-						text-decoration: line-through;
+						text-decoration: line-through solid #00800088 3px;
 					}
 
 					& .content i {
@@ -198,7 +198,7 @@ export class TodoList extends HTMLElement {
 					<div class="content ${td.isDone ? 'done' : ''}">
 						<i class="material-symbols-outlined undone-marker">circle</i>
 						<i class="material-symbols-outlined done-marker done">task_alt</i>
-						<span>${td.text}</span>
+						<span>${td.text.replace(/\n/g, '<br>')}</span>
 						<div class="labels">
 							${td.labels.map(id => {
 								const l = this.#labelById(id);
