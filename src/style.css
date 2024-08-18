@@ -111,6 +111,9 @@ h1 {
 todo-list { flex-grow: 1; }
 
 footer {
+	flex-shrink: 0;
+	position: sticky;
+	bottom: 0;
 	height: 150px;
 	display: flex;
 	align-items: center;
@@ -120,6 +123,7 @@ footer {
 	/* scroll-snap-type: x mandatory; */
 }
 footer::-webkit-scrollbar { display: none; }
+footer.main-footer { background: linear-gradient(transparent, var(--bg) 40%); }
 
 .fab {
 	display: flex;
@@ -163,7 +167,7 @@ footer::-webkit-scrollbar { display: none; }
 }
 
 .slide-indicator {
-	position: fixed;
+	position: absolute;
 	inset: auto auto 60px calc(50% - 84px);
 	display: flex;
 

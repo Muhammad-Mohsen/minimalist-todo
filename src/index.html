@@ -26,15 +26,16 @@
 	<!-- TODO LIST -->
 	<todo-list id="todoList"></todo-list>
 
-	<!-- SLIDE ANIMATION -->
-	<div class="slide-indicator">
-		<span class="material-symbols-outlined">chevron_left</span>
-		<span class="material-symbols-outlined">chevron_left</span>
-		<span class="material-symbols-outlined">chevron_left</span>
-	</div>
+	<!-- FOOTER -->
+	<footer class="main-footer">
 
-	<!-- FAB -->
-	<footer>
+		<!-- SLIDE ANIMATION -->
+		<div class="slide-indicator">
+			<span class="material-symbols-outlined">chevron_left</span>
+			<span class="material-symbols-outlined">chevron_left</span>
+			<span class="material-symbols-outlined">chevron_left</span>
+		</div>
+
 		<button class="material-symbols-outlined fab main" onclick="todoDialog.open()">add</button>
 		<label-list id="labelList" onfilter="todoList.onFiltersChanged(event)"></label-list>
 	</footer>
