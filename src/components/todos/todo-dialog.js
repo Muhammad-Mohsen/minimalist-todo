@@ -31,7 +31,7 @@ export class TodoDialog extends HTMLElement {
 	}
 	saveAndClose() {
 		// text
-		this.todo.text = this.querySelector('#todoTextField').innerHTML.trim();
+		this.todo.text = this.querySelector('#todoTextField').value.trim();
 
 		if (!this.todo.text) return;
 
@@ -101,21 +101,23 @@ export class TodoDialog extends HTMLElement {
 						display: flex;
 						flex-direction: column;
 						gap: 16px;
-						padding: 6px 0;
 					}
 
 					& #todoTextField {
+						width: 100%;
 						max-height: calc(100vh - 330px);
 						margin-block-end: 20px;
-						padding: 16px;
+						padding: 24px 16px;
+						field-sizing: content;
+						resize: none;
+						border: none;
 						color: var(--fg);
+						background: transparent;
 						outline: none;
-						overflow-y: auto;
 
-						&:empty::before {
-							content: 'TODO: add a todo...';
-							color: var(--fg-sec);
-						}
+						mask-image: linear-gradient(transparent, black 24px calc(100% - 24px), transparent);
+
+						&::placeholder { color: var(--fg-sec); }
 					}
 
 					& .label-list {
@@ -142,7 +144,7 @@ export class TodoDialog extends HTMLElement {
 					}
 
 					& footer {
-						flex-shring: 0;
+						flex-shrink: 0;
 						justify-content: flex-end;
 						gap: 20px;
 						padding: 0 calc(50% - var(--fab-size) / 2) 0 0;
@@ -159,7 +161,7 @@ export class TodoDialog extends HTMLElement {
 			<h1>${this.todo.text ? 'EDIT TODO' : 'NEW TODO'}</h1>
 
 			<main>
-				<div id="todoTextField" role="textbox" contenteditable="true" aria-multiline="true" aria-required="true">${this.todo.text}</div>
+				<textarea id="todoTextField" placeholder="TODO: add a todo..." aria-required="true">${this.todo.text}</textarea>
 
 				<div class="label-list">
 					${this.labels.map(l => this.#labelHTML(l)).join('')}
