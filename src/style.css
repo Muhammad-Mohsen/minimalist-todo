@@ -52,7 +52,10 @@
 }
 
 /* RESETS */
-*, *::before, *::after { box-sizing: border-box; }
+*, *::before, *::after {
+	box-sizing: border-box;
+	user-select: none;
+}
 * { font-family: Poppins; }
 html, body {
 	padding: 0;
