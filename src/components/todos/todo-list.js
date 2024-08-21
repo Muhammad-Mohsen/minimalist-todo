@@ -2,6 +2,21 @@ import { Repository } from "../../core/repository.js";
 
 export class TodoList extends HTMLElement {
 
+	DRAG = {
+		TIMEOUT: 500,
+		THRESHOLD: 30,
+
+		timeout: null,
+
+		startX: 0,
+		startY: 0,
+		currentX: 0,
+		currentY: 0,
+		over: null,
+
+		element: null,
+	};
+
 	constructor() { super(); }
 
 	async connectedCallback() {
@@ -40,6 +55,64 @@ export class TodoList extends HTMLElement {
 		element.scroll({ left: 0, behavior: 'smooth' });
 	}
 
+	onTouchStart(event, element) {
+		this.DRAG.startX = this.DRAG.currentX = event.touches[0].clientX;
+		this.DRAG.startY = this.DRAG.currentY = event.touches[0].clientY;
+
+		this.DRAG.timeout = setTimeout(() => {
+			if (Math.abs(this.DRAG.startX - this.DRAG.currentX) > this.DRAG.THRESHOLD) return; // this is a X slide
+			if (Math.abs(this.DRAG.startY - this.DRAG.currentY) > this.DRAG.THRESHOLD) return; // this is a Y slide...weee
+
+			this.DRAG.element = element;
+			this.classList.add('dragging');
+			this.DRAG.element.classList.add('dragging');
+
+		}, this.DRAG.TIMEOUT);
+	}
+	onTouchMove(event) {
+		if (!this.DRAG.element) return;
+
+		const [x, y] = [event.touches[0].clientX, event.touches[0].clientY];
+		this.DRAG.currentX = x;
+		this.DRAG.currentY = y;
+
+		// move dragged element
+		this.DRAG.element.style.inset = `${y}px 0 auto 0`;
+
+		const prevElement = this.querySelector('.item.dragover');
+		const element = document.elementFromPoint(x, y)?.closest('.item');
+
+		if (prevElement != element) {
+			element?.classList?.add('dragover');
+			prevElement?.classList?.remove('dragover');
+		}
+	}
+	onTouchEnd(event) {
+		if (this.DRAG.element) {
+			const element = this.querySelector('.item.dragover');
+
+			this.querySelector('.item.dragover')?.classList?.remove('dragover');
+			this.classList.remove('dragging');
+			this.DRAG.element.classList.remove('dragging');
+			this.DRAG.element.style.inset = '';
+
+			if (element) element.insertAdjacentElement('beforebegin', this.DRAG.element);
+			else this.insertAdjacentElement('beforeend', this.DRAG.element);
+			this.DRAG.element = null;
+
+		} else {
+			if (Math.abs(this.DRAG.startX - this.DRAG.currentX) > this.DRAG.THRESHOLD) return; // this is a X slide
+			if (Math.abs(this.DRAG.startY - this.DRAG.currentY) > this.DRAG.THRESHOLD) return; // this is a Y slide...weee
+
+			let element = document.elementFromPoint(this.DRAG.currentX, this.DRAG.currentY);
+			if (element.closest('.actions')) return; // a button click
+
+			element = element.closest('.item');
+			if (element) this.toggleItem(element.dataset.id, element);
+			clearTimeout(this.DRAG.timeout);
+		}
+	}
+
 	onFiltersChanged(event) {
 		const data = event.detail;
 		this.querySelectorAll('.item').toArray().forEach(td => {
@@ -58,6 +131,9 @@ export class TodoList extends HTMLElement {
 		<style id="TodoList">
 			todo-list {
 
+				transform-origin: center;
+				transition: .25s;
+
 				&.empty {
 					display: flex;
 					flex-direction: column;
@@ -75,7 +151,27 @@ export class TodoList extends HTMLElement {
 					}
 				}
 
+				&::after {
+					content: '';
+					display: block;
+					height: 2px;
+					margin-top: 8px;
+					background: var(--fg-sec);
+					scale: 0 1;
+					transition: .25s ease-out;
+				}
+
+				&.dragging {
+					/* scale: .95; */
+
+					/* prevent scrolling because when an item comes into the same place occupied by the item being dragged, it can be scrolled! */
+					& .item { overflow: hidden; }
+
+					&:not(:has(.item.dragover))::after { scale: 1 1; }
+				}
+
 				& .item {
+					position: relative;
 					display: flex;
 					max-height: 100%;
 					padding: 0 var(--scroll-overshoot);
@@ -89,6 +185,26 @@ export class TodoList extends HTMLElement {
 						translate: -50px 0;
 						transition: .25s ease, max-height .25s ease .15s;
 					}
+
+					&.dragging {
+						position: absolute;
+						opacity: .5;
+						transition: 0s;
+						pointer-events: none;
+						overflow: hidden;
+					}
+
+					&.dragover { padding-top: 32px; }
+					&::before {
+						content: '';
+						position: absolute;
+						inset: 20px -20px auto 0; /* sigh! */
+						height: 2px;
+						background: var(--fg-sec);
+						scale: 0 1;
+						transition: .25s ease-out;
+					}
+					&.dragover::before { scale: 1 1; }
 
 					& .content {
 						position: relative;
@@ -183,7 +299,6 @@ export class TodoList extends HTMLElement {
 
 					&::-webkit-scrollbar { display: none; }
 				}
-
 			}
 		</style>
 		`;
@@ -194,7 +309,9 @@ export class TodoList extends HTMLElement {
 
 		return `
 			${this.todos.map(td => `
-				<div class="item" onclick="${id}.toggleItem(${td.id}, this)" data-id="${td.id}" data-isDone="${td.isDone}" data-labels="${td.labels}">
+				<div class="item" data-id="${td.id}" data-isDone="${td.isDone}" data-labels="${td.labels}"
+						ontouchstart="${id}.onTouchStart(event, this)" ontouchmove="${id}.onTouchMove(event, this)" ontouchend="${id}.onTouchEnd(event, this)">
+
 					<div class="content ${td.isDone ? 'done' : ''}">
 						<i class="material-symbols-outlined undone-marker">circle</i>
 						<i class="material-symbols-outlined done-marker done">task_alt</i>
